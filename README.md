@@ -49,8 +49,9 @@ const char* password = "VASE_WIFI_HESLO";
 const char* mqtt_server = "public.cloud.shiftr.io";
 const char* mqtt_user = "vase_jmeno";
 const char* mqtt_pass = "vase_heslo_nebo_token";
+```
 
-## 2. Backend (Python Logger)
+### 2. Backend (Python Logger)
 
 Tento skript musí běžet neustále na pozadí, aby sbíral data z MQTT.
 
@@ -59,6 +60,7 @@ Tento skript musí běžet neustále na pozadí, aby sbíral data z MQTT.
 ```bash
 pip install paho-mqtt
 Upravte přihlašovací údaje v logger.py (stejné jako v ESP32).
+```
 
 Spusťte logger:
 bash
