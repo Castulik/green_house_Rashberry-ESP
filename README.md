@@ -9,7 +9,7 @@ Tento projekt řeší klasický problém: *"Jak dostat data ze skleníku, který
 📊 Ukázka Dashboardu
 Aplikace poskytuje přehled o aktuální teplotě, min/max hodnotách a historii vývoje.
 
-![UI in streamlit](UI.png)
+<img src="UI.png" alt="UI in streamlit" width="600">
 
 ## 🚀 Jak to funguje (Architektura)
 
@@ -86,10 +86,10 @@ streamlit run app.py
 
 ### 📁 Struktura projektu
 
-*/firmware      - Zdrojové kódy pro ESP32 (Arduino IDE / PlatformIO)
-*/src           - Python skripty (logger.py, app.py)
-*diagram.svg    - Schéma zapojení
-*teplota.db     - SQLite databáze (vytvoří se automaticky po spuštění)
+* /firmware      - Zdrojové kódy pro ESP32 (Arduino IDE / PlatformIO)
+* /src           - Python skripty (logger.py, app.py)
+* diagram.svg    - Schéma zapojení
+* teplota.db     - SQLite databáze (vytvoří se automaticky po spuštění)
 
 ### ⚠️ Disclaimer
 Toto je hobby projekt. Ujistěte se, že vaše LoRa moduly vysílají na frekvenci povolené ve vaší zemi
