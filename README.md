@@ -5,6 +5,10 @@
 Tento projekt řeší klasický problém: *"Jak dostat data ze skleníku, který je daleko od domu a nemá dosah Wi-Fi, aniž bych musel každé dva dny měnit baterie v senzorech?"*
 
 ![Architecture Diagram](diagram.svg)
+
+📊 Ukázka Dashboardu
+Aplikace poskytuje přehled o aktuální teplotě, min/max hodnotách a historii vývoje.
+
 ![UI in streamlit](UI.png)
 
 ## 🚀 Jak to funguje (Architektura)
@@ -59,35 +63,35 @@ Tento skript musí běžet neustále na pozadí, aby sbíral data z MQTT.
 
 ```bash
 pip install paho-mqtt
-Upravte přihlašovací údaje v logger.py (stejné jako v ESP32).
 ```
+Upravte přihlašovací údaje v database.py (stejné jako v ESP32).
 
 Spusťte logger:
-bash
-Copy code
+```bash
 python logger.py
+```
+
 3. Frontend (Streamlit Dashboard)
 Aplikace pro zobrazení dat.
 
 Nainstalujte závislosti:
-bash
-Copy code
+```bash
 pip install streamlit pandas plotly streamlit-autorefresh
-Spusťte aplikaci:
-bash
-Copy code
-streamlit run app.py
-📊 Ukázka Dashboardu
-Aplikace poskytuje přehled o aktuální teplotě, min/max hodnotách a historii vývoje.
+```
 
-📁 Struktura projektu
-bash
-Copy code
-/firmware      - Zdrojové kódy pro ESP32 (Arduino IDE / PlatformIO)
-/src           - Python skripty (logger.py, app.py)
-diagram.svg    - Schéma zapojení
-teplota.db     - SQLite databáze (vytvoří se automaticky po spuštění)
-⚠️ Disclaimer
+Spusťte aplikaci:
+```bash
+streamlit run app.py
+```
+
+### 📁 Struktura projektu
+
+*/firmware      - Zdrojové kódy pro ESP32 (Arduino IDE / PlatformIO)
+*/src           - Python skripty (logger.py, app.py)
+*diagram.svg    - Schéma zapojení
+*teplota.db     - SQLite databáze (vytvoří se automaticky po spuštění)
+
+### ⚠️ Disclaimer
 Toto je hobby projekt. Ujistěte se, že vaše LoRa moduly vysílají na frekvenci povolené ve vaší zemi
 (v EU typicky 868 MHz nebo 433 MHz).
 
