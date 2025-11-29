@@ -1,98 +1,96 @@
 # 🌱 IoT Smart Greenhouse Monitor
 
-**Komplexní systém pro vzdálené monitorování podmínek ve skleníku s využitím LoRa, ESP-NOW a MQTT.**
+**A comprehensive system for remote greenhouse monitoring using LoRa, ESP-NOW, and MQTT.**
 
-Tento projekt řeší klasický problém: *"Jak dostat data ze skleníku, který je daleko od domu a nemá dosah Wi-Fi, aniž bych musel každé dva dny měnit baterie v senzorech?"*
+This project solves a classic problem:*"How do I get data from a greenhouse that is far from the house and out of Wi-Fi range, without having to change sensor batteries every two days?"*
 
 ![Architecture Diagram](diagram.svg)
 
-📊 Ukázka Dashboardu
-Aplikace poskytuje přehled o aktuální teplotě, min/max hodnotách a historii vývoje.
+📊 Dashboard Preview 
+The application provides an overview of current temperature, min/max values, and historical trends.
 
 <img src="UI.png" width="90%" height="70%">
 
-## 🚀 Jak to funguje (Architektura)
+## 🚀 How It Works (Architecture)
 
-Systém využívá třívrstvou architekturu pro maximalizaci dosahu a minimalizaci spotřeby energie:
+The system utilizes a three-layer architecture to maximize range and minimize energy consumption:
 
-1.  **Senzorová vrstva (ESP32-C3 + ESP-NOW):**
-    * Senzory uvnitř skleníku měří teplotu a vlhkost.
-    * Využívají protokol **ESP-NOW** pro bleskový přenos dat a okamžitý přechod do hlubokého spánku (Deep Sleep). Díky tomu vydrží na baterie měsíce.
-2.  **Přemostění (ESP32-S3 + LoRa):**
-    * "Hub" umístěný ve skleníku (např. na střeše) přijímá data ze senzorů.
-    * Okamžitě je přeposílá pomocí **LoRa (Long Range)** technologie směrem k domu. LoRa zajistí průchod signálu přes zdi a na stovky metrů.
-3.  **Brána a Cloud (ESP32-S3 + MQTT):**
-    * Přijímač v domě chytá LoRa signál, připojuje se k domácí Wi-Fi a publikuje data na **MQTT Broker** (např. Shiftr.io).
-4.  **Vizualizace (Python + Streamlit):**
-    * Serverová část (Python skript) ukládá data do SQLite databáze.
-    * Webová aplikace (Streamlit) zobrazuje interaktivní grafy a statistiky.
+1.  **Sensor Layer (ESP32-C3 + ESP-NOW):**
+    * Sensors inside the greenhouse measure temperature and humidity.
+    * They use the ESP-NOW protocol for lightning-fast data transmission and immediate transition to Deep Sleep. This allows them to run on batteries for months.
+2.  **Bridging Layer (ESP32-S3 + LoRa):**
+    * A "Hub" located in the greenhouse (e.g., on the roof) receives data from the sensors.
+    * It immediately forwards them using LoRa (Long Range) technology towards the house. LoRa ensures signal penetration through walls and over hundreds of meters.
+3.  **Gateway & Cloud (ESP32-S3 + MQTT):**
+    * The receiver in the house captures the LoRa signal, connects to the home Wi-Fi, and publishes data to an MQTT Broker (e.g., Shiftr.io).
+4.  **Visualization (Python + Streamlit):**
+    * The server side (Python script) stores data in an SQLite database.
+    * The web application (Streamlit) displays interactive charts and statistics.
 
 ---
 
-## 🛠 Použitý Hardware
+## 🛠 Hardware Used
 
 * **Senzor:** ESP32-C3 (nebo ESP8266) + DHT22 / BME280.
-* **Hub (Skleník):** ESP32-S3 + LoRa modul (SX1278 / SX1262).
-* **Gateway (Doma):** ESP32-S3 + LoRa modul.
-* **Server:** Raspberry Pi / PC / Cloud pro běh Python skriptů.
+* **Hub (Greenhouse):** ESP32-S3 + LoRa module (SX1278 / SX1262).
+* **Gateway (Home):** ESP32-S3 + LoRa module.
+* **Server:** Raspberry Pi / PC / Cloud for running Python scripts.
 
 ---
 
-## ⚙️ Konfigurace a Instalace
+## ⚙️ Configuration and Installation
 
 ### 1. Firmware (ESP32)
-Ve složce `/firmware_esp` naleznete tři různé kódy pro tři zařízení.
-Před nahráním **musíte upravit konfigurační údaje** v souboru `Gateway.ino` a `database.py`:
+In the `/firmware_esp` folder, you will find three different codes for the three devices. Before flashing, **you must update the configuration credentials** in the `Gateway.ino` and `database.py` files:
 
 ```cpp
-// PŘÍKLAD NASTAVENÍ V KÓDU (Gateway.ino)
-const char* ssid = "VASE_WIFI_JMENO";
-const char* password = "VASE_WIFI_HESLO";
+// EXAMPLE SETTINGS IN CODE (Gateway.ino)
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 
-// MQTT Nastavení (Zaregistrujte se např. na shiftr.io)
+// MQTT Settings (Register e.g. on shiftr.io)
 const char* mqtt_server = "public.cloud.shiftr.io";
-const char* mqtt_user = "vase_jmeno";
-const char* mqtt_pass = "vase_heslo_nebo_token";
+const char* mqtt_user = "your_username";
+const char* mqtt_pass = "your_password_or_token";
 ```
 
 ### 2. Backend (Python Logger)
 
-Tento skript musí běžet neustále na pozadí, aby sbíral data z MQTT.
+This script must run continuously in the background to collect data from MQTT.
 
-### Nainstalujte závislosti:
+### Install dependencies:
 
 ```bash
 pip install paho-mqtt
 ```
-Upravte přihlašovací údaje v database.py (stejné jako v ESP32).
+Update credentials in database.py (same as in ESP32).
 
-Spusťte logger:
+Run the logger:
 ```bash
 python logger.py
 ```
 
 3. Frontend (Streamlit Dashboard)
-Aplikace pro zobrazení dat.
+Application for data visualization.
 
-Nainstalujte závislosti:
+Install dependencies:
 ```bash
 pip install streamlit pandas plotly streamlit-autorefresh
 ```
 
-Spusťte aplikaci:
+Run the application:
 ```bash
 streamlit run app.py
 ```
 
-### 📁 Struktura projektu
+### 📁 Project Structure
 
-* /firmware      - Zdrojové kódy pro ESP32 (Arduino IDE / PlatformIO)
-* /src           - Python skripty (logger.py, app.py)
-* diagram.svg    - Schéma zapojení
-* teplota.db     - SQLite databáze (vytvoří se automaticky po spuštění)
+* /firmware      - Source codes for ESP32 (Arduino IDE / PlatformIO)
+* /src           - Python scripts (logger.py, app.py)
+* diagram.svg    - Wiring/Logic diagram
+* teplota.db     - SQLite database (created automatically upon launch)
 
 ### ⚠️ Disclaimer
-Toto je hobby projekt. Ujistěte se, že vaše LoRa moduly vysílají na frekvenci povolené ve vaší zemi
-(v EU typicky 868 MHz nebo 433 MHz).
+This is a hobby project. Ensure that your LoRa modules transmit on a frequency permitted in your country (typically 868 MHz or 433 MHz in the EU).
 
 Created by [Filip Častulík]
