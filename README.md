@@ -9,7 +9,7 @@ Tento projekt řeší klasický problém: *"Jak dostat data ze skleníku, který
 📊 Ukázka Dashboardu
 Aplikace poskytuje přehled o aktuální teplotě, min/max hodnotách a historii vývoje.
 
-<img src="UI1.png" width="90%">
+<img src="UI.png" width="90%">
 
 ## 🚀 Jak to funguje (Architektura)
 
